@@ -1,4 +1,8 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'node:url';
+
+// Mismo archivo al arrancar desde la raíz, el workspace o la CLI.
+dotenv.config({ path: fileURLToPath(new URL('../../.env', import.meta.url)), quiet: true });
 
 function port(name, fallback) {
   const value = Number(process.env[name] ?? fallback);

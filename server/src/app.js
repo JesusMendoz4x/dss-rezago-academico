@@ -1,4 +1,5 @@
 import express from 'express';
+import { studentsRouter } from './modules/students/students.routes.js';
 import { qualityRouter } from './modules/quality/quality.routes.js';
 import { healthRouter } from './modules/health/health.routes.js';
 import { scenariosRouter } from './modules/scenarios/scenarios.routes.js';
@@ -10,5 +11,6 @@ app.use(express.json({ limit: '1mb' }));
 app.use('/api/health', healthRouter);
 app.use('/api/scenarios', scenariosRouter);
 app.use('/api/quality', qualityRouter);
+app.use('/api/students', studentsRouter);
 app.use(notFound);
 app.use(errorHandler);

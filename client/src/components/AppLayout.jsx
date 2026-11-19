@@ -1,7 +1,6 @@
 import Icon from './Icon.jsx';
 
 const upcoming = [
-  { name: 'Estudiantes', icon: 'students' },
   { name: 'Comparar escenarios', icon: 'scenarios' },
 ];
 
@@ -21,7 +20,7 @@ export default function AppLayout({ children, page }) {
         </a>
         <nav aria-label="Navegación principal">
           <p className="nav-label">ESPACIO DE TRABAJO</p>
-          {[{ id: 'overview', name: 'Resumen', href: '#/', icon: 'overview' }, { id: 'quality', name: 'Calidad de datos', href: '#/calidad', icon: 'quality' }].map((item) => (
+          {[{ id: 'overview', name: 'Resumen', href: '#/', icon: 'overview' }, { id: 'quality', name: 'Calidad de datos', href: '#/calidad', icon: 'quality' }, { id: 'students', name: 'Estudiantes', href: '#/estudiantes', icon: 'students' }].map((item) => (
             <a className={`nav-item${page === item.id ? ' is-active' : ''}`} href={item.href} aria-current={page === item.id ? 'page' : undefined} key={item.id}>
               <Icon name={item.icon} /><span>{item.name}</span>
             </a>
@@ -41,7 +40,7 @@ export default function AppLayout({ children, page }) {
       </aside>
       <div className="workspace">
         <header className="topbar">
-          <p>Espacio del tutor <span aria-hidden="true">/</span> <strong>{page === 'quality' ? 'Calidad de datos' : 'Resumen'}</strong></p>
+          <p>Espacio del tutor <span aria-hidden="true">/</span> <strong>{page === 'quality' ? 'Calidad de datos' : page === 'students' ? 'Estudiantes' : 'Resumen'}</strong></p>
           <span className="demo-label">Datos ficticios</span>
         </header>
         <main id="main-content" className="main-content" tabIndex={-1}>{children}</main>

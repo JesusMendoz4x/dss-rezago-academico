@@ -148,3 +148,19 @@ tbody tr:hover { background: #f8faf9; }
   .page-heading { flex-wrap: wrap; }
   .metric-card { padding: 16px; }
 }
+
+/* Consulta funcional de estudiantes */
+.students-table { min-width: 900px; }
+.students-table td { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.text-button { border: 0; background: transparent; color: #166552; text-decoration: underline; text-underline-offset: 3px; padding: 4px; font: inherit; cursor: pointer; }
+.selected-row { background: #e9f3ee; }
+.student-detail { margin-top: 32px; padding: 24px; background: #fff; border: 1px solid var(--border); border-radius: 14px; }
+.student-detail .section-heading { flex-wrap: wrap; }
+.student-detail .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.metric-card .student-metric-value { font-size: 1.5rem; }
+.indicator-warnings { color: #795314; padding: 16px 16px 16px 36px; background: #fff8e8; border-radius: 8px; }
+.student-detail h2:focus { outline: none; }
+@media (max-width: 480px) {
+  .student-detail { padding: 16px; }
+  .student-detail .metric-grid { grid-template-columns: 1fr; }
+}

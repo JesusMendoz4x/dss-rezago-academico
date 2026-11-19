@@ -1,72 +1,75 @@
-# DSS de rezago acad?mico
+# DSS de rezago académico
 
-Sistema de apoyo al tutor para priorizar el seguimiento semanal de estudiantes. Basado en `Proyecto_Rezago_Academico.docx`.
+Sistema de apoyo al tutor para priorizar el seguimiento semanal de estudiantes. Stack: MySQL, Express, React y Node.js. Se utilizan únicamente datos ficticios.
 
-Stack: **MySQL, Express, React y Node.js**, con JavaScript y m?dulos ES. Cliente React con Vite, API Express y conexi?n MySQL mediante mysql2. Se recomienda Node.js 24 LTS y MySQL 8.4.
+## Requisitos
 
-## Estado
+- Node.js 24 o superior; se recomienda la versión 24 indicada en `.nvmrc`.
+- npm con soporte para workspaces.
+- MySQL 8.4 para la carga persistente; no es necesario para ver Resumen y Calidad.
 
-API de salud, escenarios, conexión MySQL y pantalla inicial React. ETL implementado con evidencias locales y carga transaccional. Indicadores, clasificación y vistas de análisis siguen pendientes. Los datos disponibles son completamente ficticios.
+## Instalación en Windows
 
-## Instalaci?n
-
-Desde la ra?z, en PowerShell:
+Abrir PowerShell en la raíz:
 
 ```powershell
-npm install
+cd C:\Users\jesus\Documents\Proyectos\dss-rezago-academico
+node --version
+npm.cmd --version
+npm.cmd ci --include=dev
+npm.cmd run doctor
+npm.cmd run dev
+```
+
+`npm ci` instala exactamente las versiones de `package-lock.json` y requiere que ese archivo esté presente. Instala todo desde la raíz, no por separado en client/server. `--include=dev` incluye las herramientas de desarrollo, necesarios para desarrollo. Si agregas o cambias dependencias, usa `npm install` y guarda los cambios de package.json y package-lock.json juntos.
+
+`dev` ejecuta primero el diagnóstico y después inicia la API y el cliente directamente con Node, sin invocar el comando concurrently. Mantén abierta la terminal; Ctrl+C detiene ambos servicios.
+
+- Interfaz: http://localhost:5173
+- Calidad: http://localhost:5173/#/calidad
+- Estudiantes: http://localhost:5173/#/estudiantes
+- API: http://localhost:3001/api/health
+- Validación de fuentes: http://localhost:3001/api/quality
+
+El proxy de Vite envía `/api` a Express en el puerto 3001. La pantalla de calidad valida los CSV actuales en memoria; no necesita ejecutar antes `etl` y no confirma una importación en MySQL.
+
+## Configuración MySQL (cuando se vaya a cargar)
+
+```powershell
 Copy-Item server/.env.example server/.env
 ```
 
-Editar `server/.env` con las credenciales locales. Crear una base vac?a y cargar `database/schema.sql` desde MySQL Workbench o el cliente MySQL. El script crea la base `dss_rezago_academico` y las tablas si no existen; no borra datos. Usar una cuenta de aplicaci?n con permisos limitados a esa base.
-
-```powershell
-npm run dev
-```
-
-- Cliente: http://localhost:5173
-- API: http://localhost:3001/api/health
-- Conexi?n MySQL: http://localhost:3001/api/health/database
-- Escenarios: http://localhost:3001/api/scenarios
-
-Vite redirige `/api` al servidor durante desarrollo. La API puede iniciar sin MySQL; la ruta de base de datos responder? 503 si no logra conectar.
+Copiar solo si aún no existe, para conservar tus credenciales. Editar `server/.env`, crear el esquema con `database/schema.sql` y ejecutar `npm.cmd run etl:load`. El archivo de entorno se lee desde server independientemente del directorio desde el que arranque Node. No subir `.env` a Git.
 
 ## Comandos
 
-```powershell
-npm run dev:client
-npm run dev:server
-npm run build
-npm start
-```
+| Comando | Función |
+|---|---|
+| `npm.cmd run doctor` | Comprueba Node y dependencias instaladas |
+| `npm.cmd run dev` | API y cliente en desarrollo |
+| `npm.cmd run dev:client` | Solo cliente |
+| `npm.cmd run dev:server` | Solo API |
+| `npm.cmd run build` | Compila React en client/dist |
+| `npm.cmd run data:check` | Verifica que los CSV coincidan con su receta |
+| `npm.cmd run etl` | Limpieza y evidencias locales |
+| `npm.cmd run etl:load` | Limpieza y carga transaccional MySQL |
+| `npm.cmd run test:etl` | Pruebas del ETL |
 
-`build` genera `client/dist`. `start` inicia ?nicamente la API. Para producci?n hay que servir el cliente y redirigir `/api` con un servidor web; esa configuraci?n queda pendiente. No hay autenticaci?n implementada y esta base est? destinada al desarrollo local.
+`npm start` inicia únicamente la API; el despliegue del cliente se configurará posteriormente. Esta base es para desarrollo local y todavía no implementa autenticación.
 
-## Organizaci?n
+## Archivos de instalación y Git
 
-```text
-client/                 React + Vite
-  src/components/       Componentes reutilizables
-  src/pages/            Pantallas
-  src/services/         Acceso a la API
-  src/styles/           Estilos
-server/
-  src/config/           Entorno y pool MySQL
-  src/middleware/       Errores y rutas inexistentes
-  src/modules/          Salud, escenarios y futuros m?dulos DSS
-  src/services/         ETL, indicadores y modelo de decisi?n
-  src/repositories/     Consultas y persistencia
-  config/               Escenarios versionados
-  tests/                Espacio para pruebas futuras
-  scripts/              Comandos de datos y ETL
- database/              Esquema MySQL y futuras migraciones
- data/                  Fuentes CSV, datos preparados y rechazos
- docs/                  Arquitectura, diccionario y plan de trabajo
-```
+- Incluir `package.json`, `package-lock.json`, los manifiestos de client/server y `.nvmrc`.
+- Incluir ejemplos de entorno y el diagnóstico de instalación.
+- Excluir `node_modules/`, `.env`, `dist/` y evidencias generadas, conforme a `.gitignore`.
+- Conservar un único package-lock.json en la raíz del workspace.
 
-Solo se utilizar?n datos ficticios y c?digos de estudiante. El ?ndice orientar? el acompa?amiento; la decisi?n final ser? del tutor.
+El comando dev usa scripts/dev.mjs y ya no depende de resolver concurrently en PATH. Si faltan dependencias, ejecutar `npm.cmd ci --include=dev` desde la raíz. Si no se reconoce Node/npm después de instalarlos, cerrar y volver a abrir la terminal. Si los puertos 5173 o 3001 están ocupados, detener la ejecución anterior antes de iniciar otra.
 
-Consultar [arquitectura](docs/arquitectura.md), [diccionario](docs/diccionario-datos.md) y [plan de trabajo](docs/plan.md).
+## Organización y avance
 
-## ETL
+`client/`: React/Vite. `server/`: Express, servicios y repositorios. `database/`: esquema MySQL. `data/`: CSV ficticios y referencias. `docs/`: requisitos y procesos.
 
-Ejecutar `npm run etl` para producir datos limpios y evidencias; `npm run etl:load` para cargar MySQL y `npm run test:etl` para validar. Ver [proceso ETL](docs/etl.md).
+Implementados: estructura visual, Resumen, Calidad de datos, escenarios configurados y ETL con evidencias/carga transaccional. Estudiantes: filtros, detalle e indicadores descriptivos desde fuentes validadas, con pruebas en `npm.cmd run test:indicators`. Pendientes: índice de riesgo, lista priorizada y comparador. El índice orientará el acompañamiento; la decisión final corresponde al tutor.
+
+Ver [ETL](docs/etl.md), [arquitectura](docs/arquitectura.md), [diccionario](docs/diccionario-datos.md) y [plan](docs/plan.md).

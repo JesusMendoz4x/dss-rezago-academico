@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import AppLayout from './components/AppLayout.jsx';
 import DashboardPage from './pages/DashboardPage.jsx';
 import QualityPage from './pages/QualityPage.jsx';
+import StudentsPage from './pages/StudentsPage.jsx';
 
 function currentPage() {
-  return window.location.hash === '#/calidad' ? 'quality' : 'overview';
+  return ({ '#/calidad': 'quality', '#/estudiantes': 'students' })[window.location.hash] || 'overview';
 }
 
 export default function App() {
@@ -15,14 +16,14 @@ export default function App() {
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
   useEffect(() => {
-    document.title = `${page === 'quality' ? 'Calidad de datos' : 'Resumen académico'} | Aula`;
+    document.title = `${page === 'quality' ? 'Calidad de datos' : page === 'students' ? 'Estudiantes' : 'Resumen académico'} | Aula`;
     document.getElementById('main-content')?.focus({ preventScroll: true });
     window.scrollTo(0, 0);
   }, [page]);
 
   return (
     <AppLayout page={page}>
-      {page === 'quality' ? <QualityPage /> : <DashboardPage />}
+      {page === 'quality' ? <QualityPage /> : page === 'students' ? <StudentsPage /> : <DashboardPage />}
     </AppLayout>
   );
 }

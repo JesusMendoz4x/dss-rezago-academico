@@ -15,3 +15,7 @@ export function getScenarios(signal) {
 export function getQuality(signal) {
   return get('/api/quality', signal, 'No se pudo validar la calidad de los datos. Verifica que la API esté en ejecución.');
 }
+
+export function getStudents(window, signal) {
+  return get(`/api/students?window=${encodeURIComponent(window)}`, signal, 'No se pudieron consultar los estudiantes. Verifica que la API esté en ejecución.');
+}
