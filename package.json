@@ -14,7 +14,9 @@
     "dev:client": "npm run dev -w client",
     "dev:server": "npm run dev -w server",
     "build": "npm run build -w client",
-    "start": "npm start -w server"
+    "start": "npm start -w server",
+    "data:generate": "node server/scripts/generate-fixtures.js",
+    "data:check": "node server/scripts/generate-fixtures.js --check"
   },
   "devDependencies": {
     "concurrently": "^9.2.0"

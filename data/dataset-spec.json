@@ -1,0 +1,188 @@
+{
+  "version": "1.0.0",
+  "datos_ficticios": true,
+  "metodo": "fixture determinista, sin aleatoriedad",
+  "periodo_inicio": "2026-02-02",
+  "periodo_fin": "2026-03-27",
+  "fecha_corte": "2026-03-13",
+  "grupos": [
+    "ISC-1A",
+    "ISC-2A",
+    "ISC-3A"
+  ],
+  "regla_asistencia": "una sesion por estudiante y dia, sin materias separadas",
+  "regla_entregas": "las actividades futuras son validas pero se excluyen del denominador de vencidas",
+  "anomalias": [
+    {
+      "id": "A01",
+      "archivo": "asistencia.csv",
+      "operacion": "replace",
+      "indice": 0,
+      "campo": "id_estudiante",
+      "valor": "e-1",
+      "esperado": "corregir a E-0001"
+    },
+    {
+      "id": "A02",
+      "archivo": "asistencia.csv",
+      "operacion": "replace",
+      "indice": 1,
+      "campo": "fecha_sesion",
+      "valor": "03/02/26",
+      "esperado": "corregir a 2026-02-03; interpretar DD/MM/AA"
+    },
+    {
+      "id": "A03",
+      "archivo": "asistencia.csv",
+      "operacion": "replace",
+      "indice": 2,
+      "campo": "asistio",
+      "valor": "SI",
+      "esperado": "corregir a 1"
+    },
+    {
+      "id": "A04",
+      "archivo": "asistencia.csv",
+      "operacion": "append",
+      "fila": [
+        "E-0001",
+        "2026-02-05",
+        "1"
+      ],
+      "esperado": "descartar duplicado exacto"
+    },
+    {
+      "id": "A05",
+      "archivo": "asistencia.csv",
+      "operacion": "append",
+      "fila": [
+        "E-0001",
+        "2026-03-16",
+        "1"
+      ],
+      "esperado": "rechazar fecha posterior al corte"
+    },
+    {
+      "id": "A06",
+      "archivo": "asistencia.csv",
+      "operacion": "append",
+      "fila": [
+        "E-0001",
+        "2026-01-30",
+        "1"
+      ],
+      "esperado": "rechazar fecha fuera del periodo"
+    },
+    {
+      "id": "A07",
+      "archivo": "asistencia.csv",
+      "operacion": "append",
+      "fila": [
+        "E-0001",
+        "2026-02-30",
+        "1"
+      ],
+      "esperado": "rechazar fecha inexistente"
+    },
+    {
+      "id": "A08",
+      "archivo": "asistencia.csv",
+      "operacion": "append",
+      "fila": [
+        "E-9999",
+        "2026-02-02",
+        "1"
+      ],
+      "esperado": "rechazar estudiante fuera del catalogo"
+    },
+    {
+      "id": "A09",
+      "archivo": "asistencia.csv",
+      "operacion": "append",
+      "fila": [
+        "E-0003",
+        "2026-02-02",
+        "tal vez"
+      ],
+      "esperado": "rechazar booleano ambiguo"
+    },
+    {
+      "id": "A10",
+      "archivo": "evaluaciones.csv",
+      "operacion": "replace",
+      "indice": 0,
+      "campo": "id_estudiante",
+      "valor": "E0001",
+      "esperado": "corregir a E-0001"
+    },
+    {
+      "id": "A11",
+      "archivo": "evaluaciones.csv",
+      "operacion": "append",
+      "fila": [
+        "E-0001",
+        "EV-X1",
+        "2026-03-09",
+        "11"
+      ],
+      "esperado": "rechazar nota fuera de rango"
+    },
+    {
+      "id": "A12",
+      "archivo": "evaluaciones.csv",
+      "operacion": "append",
+      "fila": [
+        "E-0001",
+        "EV-X2",
+        "2026-03-09",
+        "-2"
+      ],
+      "esperado": "rechazar nota fuera de rango"
+    },
+    {
+      "id": "A13",
+      "archivo": "evaluaciones.csv",
+      "operacion": "append",
+      "fila": [
+        "E-0001",
+        "EV-X3",
+        "2026-03-09",
+        "pendiente"
+      ],
+      "esperado": "rechazar nota no numerica"
+    },
+    {
+      "id": "A14",
+      "archivo": "evaluaciones.csv",
+      "operacion": "append",
+      "fila": [
+        "E-0001",
+        "EV-X4",
+        "2026-03-09",
+        ""
+      ],
+      "esperado": "rechazar nota faltante; no imputar cero"
+    },
+    {
+      "id": "A15",
+      "archivo": "entregas.csv",
+      "operacion": "replace",
+      "indice": 0,
+      "campo": "entregada",
+      "valor": "presente",
+      "esperado": "corregir a 1 segun equivalencias documentadas"
+    },
+    {
+      "id": "A16",
+      "archivo": "entregas.csv",
+      "operacion": "append",
+      "fila": [
+        "",
+        "ACT-X",
+        "2026-03-02",
+        "1"
+      ],
+      "esperado": "rechazar identificador faltante"
+    }
+  ]
+}

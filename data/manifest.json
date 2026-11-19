@@ -1,0 +1,114 @@
+{
+  "version": "1.0.0",
+  "datos_ficticios": true,
+  "fecha_corte": "2026-03-13",
+  "archivos": {
+    "estudiantes.csv": {
+      "filas_referencia": 30,
+      "filas_raw": 30,
+      "sha256": "251135477fa588e46a28395a2113b8887ba5ecd7aed6f556a15605671369000c",
+      "anomalias": []
+    },
+    "asistencia.csv": {
+      "filas_referencia": 693,
+      "filas_raw": 699,
+      "sha256": "15977b57af7b2ae8eb66788fa2ed6b6cc48c778450376de80c9b2ea80143c405",
+      "anomalias": [
+        {
+          "id": "A01",
+          "linea_csv": 2,
+          "esperado": "corregir a E-0001"
+        },
+        {
+          "id": "A02",
+          "linea_csv": 3,
+          "esperado": "corregir a 2026-02-03; interpretar DD/MM/AA"
+        },
+        {
+          "id": "A03",
+          "linea_csv": 4,
+          "esperado": "corregir a 1"
+        },
+        {
+          "id": "A04",
+          "linea_csv": 695,
+          "esperado": "descartar duplicado exacto"
+        },
+        {
+          "id": "A05",
+          "linea_csv": 696,
+          "esperado": "rechazar fecha posterior al corte"
+        },
+        {
+          "id": "A06",
+          "linea_csv": 697,
+          "esperado": "rechazar fecha fuera del periodo"
+        },
+        {
+          "id": "A07",
+          "linea_csv": 698,
+          "esperado": "rechazar fecha inexistente"
+        },
+        {
+          "id": "A08",
+          "linea_csv": 699,
+          "esperado": "rechazar estudiante fuera del catalogo"
+        },
+        {
+          "id": "A09",
+          "linea_csv": 700,
+          "esperado": "rechazar booleano ambiguo"
+        }
+      ]
+    },
+    "evaluaciones.csv": {
+      "filas_referencia": 111,
+      "filas_raw": 115,
+      "sha256": "b2f9a4b437e7bf8c883fe767f650ede5f6b05b82e396ca04a17ae5f55fc8d161",
+      "anomalias": [
+        {
+          "id": "A10",
+          "linea_csv": 2,
+          "esperado": "corregir a E-0001"
+        },
+        {
+          "id": "A11",
+          "linea_csv": 113,
+          "esperado": "rechazar nota fuera de rango"
+        },
+        {
+          "id": "A12",
+          "linea_csv": 114,
+          "esperado": "rechazar nota fuera de rango"
+        },
+        {
+          "id": "A13",
+          "linea_csv": 115,
+          "esperado": "rechazar nota no numerica"
+        },
+        {
+          "id": "A14",
+          "linea_csv": 116,
+          "esperado": "rechazar nota faltante; no imputar cero"
+        }
+      ]
+    },
+    "entregas.csv": {
+      "filas_referencia": 300,
+      "filas_raw": 301,
+      "sha256": "881cf12bd0c1b713a1d28ff3705bb5c8a0e19430c45d04a08dc7ece5c48510f0",
+      "anomalias": [
+        {
+          "id": "A15",
+          "linea_csv": 2,
+          "esperado": "corregir a 1 segun equivalencias documentadas"
+        },
+        {
+          "id": "A16",
+          "linea_csv": 302,
+          "esperado": "rechazar identificador faltante"
+        }
+      ]
+    }
+  }
+}
