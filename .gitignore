@@ -1,1 +1,25 @@
 *.pdf
+/Proyecto_Rezago_Academico.docx
+
+# Node y compilados
+node_modules/
+dist/
+coverage/
+*.log
+
+# Variables locales
+.env
+.env.*
+!.env.example
+
+# Datos generados
+data/clean/*
+!data/clean/.gitkeep
+data/rejected/*
+!data/rejected/.gitkeep
+
+# Editor y sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

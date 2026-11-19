@@ -1,0 +1,158 @@
+[
+  {
+    "version": "1.0.0",
+    "pesos": {
+      "asistencia": 0.3,
+      "desempeno": 0.35,
+      "entregas": 0.2,
+      "tendencia": 0.15
+    },
+    "umbrales": {
+      "medio": 30,
+      "alto": 60
+    },
+    "rangos": {
+      "asistencia": {
+        "sinRiesgo": 90,
+        "maximoRiesgo": 60
+      },
+      "desempeno": {
+        "sinRiesgo": 8,
+        "maximoRiesgo": 6
+      },
+      "entregas": {
+        "sinRiesgo": 90,
+        "maximoRiesgo": 50
+      },
+      "tendencia": {
+        "sinRiesgo": 0,
+        "maximoRiesgo": -2
+      }
+    },
+    "minimos": {
+      "sesiones": 4,
+      "evaluaciones": 2
+    },
+    "ventanaSemanas": null,
+    "capacidadTutor": null,
+    "id": "base",
+    "nombre": "Base"
+  },
+  {
+    "version": "1.0.0",
+    "pesos": {
+      "asistencia": 0.5,
+      "desempeno": 0.2,
+      "entregas": 0.2,
+      "tendencia": 0.1
+    },
+    "umbrales": {
+      "medio": 30,
+      "alto": 60
+    },
+    "rangos": {
+      "asistencia": {
+        "sinRiesgo": 90,
+        "maximoRiesgo": 60
+      },
+      "desempeno": {
+        "sinRiesgo": 8,
+        "maximoRiesgo": 6
+      },
+      "entregas": {
+        "sinRiesgo": 90,
+        "maximoRiesgo": 50
+      },
+      "tendencia": {
+        "sinRiesgo": 0,
+        "maximoRiesgo": -2
+      }
+    },
+    "minimos": {
+      "sesiones": 4,
+      "evaluaciones": 2
+    },
+    "ventanaSemanas": null,
+    "capacidadTutor": null,
+    "id": "asistencia",
+    "nombre": "Prioridad a asistencia"
+  },
+  {
+    "version": "1.0.0",
+    "pesos": {
+      "asistencia": 0.3,
+      "desempeno": 0.35,
+      "entregas": 0.2,
+      "tendencia": 0.15
+    },
+    "umbrales": {
+      "medio": 30,
+      "alto": 50
+    },
+    "rangos": {
+      "asistencia": {
+        "sinRiesgo": 90,
+        "maximoRiesgo": 60
+      },
+      "desempeno": {
+        "sinRiesgo": 8,
+        "maximoRiesgo": 6
+      },
+      "entregas": {
+        "sinRiesgo": 90,
+        "maximoRiesgo": 50
+      },
+      "tendencia": {
+        "sinRiesgo": 0,
+        "maximoRiesgo": -2
+      }
+    },
+    "minimos": {
+      "sesiones": 4,
+      "evaluaciones": 2
+    },
+    "ventanaSemanas": null,
+    "capacidadTutor": null,
+    "id": "sensible",
+    "nombre": "Umbral m?s sensible"
+  },
+  {
+    "version": "1.0.0",
+    "pesos": {
+      "asistencia": 0.3,
+      "desempeno": 0.35,
+      "entregas": 0.2,
+      "tendencia": 0.15
+    },
+    "umbrales": {
+      "medio": 30,
+      "alto": 60
+    },
+    "rangos": {
+      "asistencia": {
+        "sinRiesgo": 90,
+        "maximoRiesgo": 60
+      },
+      "desempeno": {
+        "sinRiesgo": 8,
+        "maximoRiesgo": 6
+      },
+      "entregas": {
+        "sinRiesgo": 90,
+        "maximoRiesgo": 50
+      },
+      "tendencia": {
+        "sinRiesgo": 0,
+        "maximoRiesgo": -2
+      }
+    },
+    "minimos": {
+      "sesiones": 4,
+      "evaluaciones": 2
+    },
+    "ventanaSemanas": 4,
+    "capacidadTutor": null,
+    "id": "ventana-corta",
+    "nombre": "?ltimas cuatro semanas"
+  }
+]
