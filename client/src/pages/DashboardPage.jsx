@@ -52,7 +52,7 @@ export default function DashboardPage() {
       {status === 'ready' && result && <>
         <p className="results-count">Corte: {result.manifest.configuration.fecha_corte} · {result.scenario.ventanaSemanas ? `Últimas ${result.scenario.ventanaSemanas} semanas` : 'Periodo completo'} · {students.length} estudiantes</p>
         <section className="metric-grid risk-summary" aria-label="Resumen de todos los estudiantes del escenario">
-          {Object.entries(levels).map(([key, label]) => <article className="metric-card" key={key}><p>{label}</p><strong>{students.filter((student) => student.level === key).length}</strong></article>)}
+          {Object.entries(levels).map(([key, label]) => <article className={`metric-card summary-${key}`} key={key}><p>{label}</p><strong>{students.filter((student) => student.level === key).length}</strong></article>)}
         </section>
         <p className="metric-explanation">Resumen del escenario completo. Los filtros siguientes solo modifican la lista; la posición pertenece al orden general.</p>
         <section className="quality-section" aria-labelledby="priorities-title">
