@@ -1,10 +1,16 @@
+import Icon from './Icon.jsx';
+
 export default function EmptyState() {
   return (
-    <section className="card" aria-labelledby="empty-title">
-      <span className="badge">Sin datos cargados</span>
-      <h2 id="empty-title">El seguimiento empieza con los datos</h2>
-      <p>Cuando se incorporen las fuentes acad?micas, aqu? podr?s consultar indicadores y priorizar el acompa?amiento.</p>
-      <p>Se utilizar?n c?digos de estudiante y datos ficticios. La decisi?n final corresponde al tutor.</p>
+    <section className="empty-state" aria-labelledby="empty-title">
+      <div className="empty-illustration"><Icon name="data" /></div>
+      <span className="section-kicker">TU PUNTO DE PARTIDA</span>
+      <h2 id="empty-title">Cada seguimiento empieza con información</h2>
+      <p>El resumen estará disponible cuando los datos académicos estén conectados. Aquí podrás identificar quién necesita acompañamiento y comprender los motivos.</p>
+      <span className="empty-status">Sin un lote conectado a esta vista</span>
+      <div className="source-list" aria-label="Fuentes académicas previstas">
+        <span>Asistencia</span><span>Evaluaciones</span><span>Entregas</span>
+      </div>
     </section>
   );
 }
