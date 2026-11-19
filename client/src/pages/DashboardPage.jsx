@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { getRecommendations, getScenarios } from '../services/api.js';
+import { buildAttentionPlan, parseCapacity } from '../utils/attention-plan.js';
 
+const planLabels = { scheduled: 'Esta semana', pending: 'Pendiente', monitoring: 'Monitoreo', complete_data: 'Completar datos' };
 const levels = { alto: 'Alto', medio: 'Medio', bajo: 'Bajo', sin_dictamen: 'Sin dictamen' };
 const names = { asistencia: 'Asistencia', desempeno: 'Desempeño', entregas: 'Entregas', tendencia: 'Tendencia' };
 const format = (value) => value == null ? 'No calculable' : new Intl.NumberFormat('es-MX', { maximumFractionDigits: 2 }).format(value);
@@ -16,6 +18,10 @@ export default function DashboardPage() {
   const [level, setLevel] = useState('');
   const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState(null);
+  const [capacityInput, setCapacityInput] = useState('5');
+  const [capacity, setCapacity] = useState(5);
+  const [capacityError, setCapacityError] = useState('');
+  const [planFilter, setPlanFilter] = useState('');
   const heading = useRef(null);
 
   useEffect(() => {
@@ -29,10 +35,12 @@ export default function DashboardPage() {
 
   const students = result?.students || [];
   const groups = [...new Set(students.map((student) => student.group))].sort();
+  const plan = useMemo(() => buildAttentionPlan(result?.students || [], capacity), [result, capacity]);
   const filtered = useMemo(() => (result?.students || []).filter((student) => (
     (!group || student.group === group) && (!level || student.level === level)
+    && (!planFilter || plan.statuses.get(student.id) === planFilter)
     && student.id.toLowerCase().includes(query.trim().toLowerCase())
-  )), [result, group, level, query]);
+  )), [result, group, level, query, planFilter, plan]);
   const selected = filtered.find((student) => student.id === selectedId);
   useEffect(() => { if (selectedId) heading.current?.focus(); }, [selectedId]);
 
@@ -55,19 +63,40 @@ export default function DashboardPage() {
           {Object.entries(levels).map(([key, label]) => <article className={`metric-card summary-${key}`} key={key}><p>{label}</p><strong>{students.filter((student) => student.level === key).length}</strong></article>)}
         </section>
 
+        <section className="capacity-panel" aria-labelledby="capacity-title">
+          <div className="section-heading"><div><h2 id="capacity-title">Plan de atención semanal</h2><p>Capacidad para todos los grupos · Casos de riesgo alto y medio</p></div></div>
+          <form className="capacity-form" onSubmit={(event) => {
+            event.preventDefault();
+            try { setCapacity(parseCapacity(capacityInput)); setCapacityError(''); }
+            catch (cause) { setCapacityError(cause.message); }
+          }}>
+            <label htmlFor="weekly-capacity">Estudiantes que puedo atender esta semana
+              <input id="weekly-capacity" type="text" inputMode="numeric" value={capacityInput} aria-invalid={Boolean(capacityError)} aria-describedby={capacityError ? 'capacity-error' : undefined} onChange={(event) => { setCapacityInput(event.target.value); setCapacityError(''); }} />
+            </label>
+            <button type="submit" className="button-secondary">Aplicar capacidad</button>
+          </form>
+          {capacityError && <p id="capacity-error" className="capacity-error" role="alert">{capacityError}</p>}
+          <div className="capacity-results" role="status" aria-live="polite">
+            <p className="results-count">Capacidad aplicada: {capacity}</p>
+            <dl className="capacity-stats"><div><dt>Esta semana</dt><dd>{plan.scheduled}</dd></div><div><dt>Pendientes</dt><dd>{plan.pending}</dd></div><div><dt>Espacios disponibles</dt><dd>{plan.available}</dd></div></dl>
+          </div>
+        </section>
+
         <section className="quality-section" aria-labelledby="priorities-title">
           <div className="section-heading"><div><h2 id="priorities-title">Prioridad de seguimiento</h2></div></div>
           <div className="filter-bar">
             <label>Grupo<select value={group} onChange={(event) => { setGroup(event.target.value); setSelectedId(null); }}><option value="">Todos los grupos</option>{groups.map((name) => <option key={name}>{name}</option>)}</select></label>
             <label>Nivel<select value={level} onChange={(event) => { setLevel(event.target.value); setSelectedId(null); }}><option value="">Todos los niveles</option>{Object.entries(levels).map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select></label>
+            <label>Plan semanal<select value={planFilter} onChange={(event) => { setPlanFilter(event.target.value); setSelectedId(null); }}><option value="">Todos los casos</option>{Object.entries(planLabels).map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select></label>
             <label>Buscar código<input type="search" value={query} placeholder="Ej. E-0007" onChange={(event) => { setQuery(event.target.value); setSelectedId(null); }} /></label>
           </div>
           <p className="results-count" role="status">{filtered.length} estudiantes en la lista</p>
           {!filtered.length ? <p className="feedback">No hay estudiantes con estos filtros.</p> : <div className="table-scroll" role="region" aria-label="Lista priorizada, desplazamiento horizontal" tabIndex={0}>
-            <table className="students-table"><caption className="sr-only">Prioridad y acción sugerida por estudiante</caption><thead><tr>{['Posición general', 'Estudiante', 'Grupo', 'Índice / 100', 'Nivel', 'Tipo', 'Acción sugerida', 'Explicación'].map((name) => <th scope="col" key={name}>{name}</th>)}</tr></thead>
+            <table className="students-table"><caption className="sr-only">Prioridad y acción sugerida por estudiante</caption><thead><tr>{['Posición general', 'Estudiante', 'Grupo', 'Índice / 100', 'Nivel', 'Tipo', 'Acción sugerida', 'Plan semanal', 'Explicación'].map((name) => <th scope="col" key={name}>{name}</th>)}</tr></thead>
               <tbody>{filtered.map((student) => <tr key={student.id} className={selectedId === student.id ? 'selected-row' : ''}>
                 <td>{student.position ?? 'No aplica'}</td><th scope="row">{student.id}</th><td>{student.group}</td><td>{student.index == null ? 'Sin dictamen' : format(student.index)}</td>
                 <td><span className={`action-badge risk-${student.level}`}>{levels[student.level]}</span></td><td>{student.riskType || 'No aplica'}</td><td className="recommendation-action">{student.action}</td>
+                <td><span className={`action-badge plan-${plan.statuses.get(student.id)}`}>{planLabels[plan.statuses.get(student.id)]}</span></td>
                 <td><button type="button" className="text-button" aria-label={`Explicar ${student.id}`} aria-expanded={selectedId === student.id} onClick={() => setSelectedId(student.id)}>Ver motivos</button></td>
               </tr>)}</tbody>
             </table>
@@ -77,6 +106,7 @@ export default function DashboardPage() {
           <div className="section-heading"><div><p className="section-kicker">RECOMENDACIÓN EXPLICABLE</p><h2 id="risk-detail-title" tabIndex={-1} ref={heading}>{selected.id} · {levels[selected.level]}</h2><p>{selected.action}</p></div>
             <button type="button" className="button-secondary" onClick={() => { document.querySelector(`[aria-label="Explicar ${selected.id}"]`)?.focus(); setSelectedId(null); }}>Cerrar explicación</button>
           </div>
+          <p><span className={`action-badge plan-${plan.statuses.get(selected.id)}`}>{planLabels[plan.statuses.get(selected.id)]}</span></p>
           {selected.index != null && <><p className="risk-score">{format(selected.index)} <span>de 100 puntos</span></p>
             <div className="table-scroll" role="region" aria-label="Cálculo del índice, desplazamiento horizontal" tabIndex={0}><table><caption className="sr-only">Componentes del índice de {selected.id}</caption><thead><tr>{['Componente', 'Indicador', 'Riesgo / 100', 'Peso original', 'Peso efectivo', 'Aportación'].map((name) => <th scope="col" key={name}>{name}</th>)}</tr></thead>
               <tbody>{selected.components.map((part) => <tr key={part.name}><th scope="row">{names[part.name]}</th><td>{format(part.value)}{['asistencia', 'entregas'].includes(part.name) ? ' %' : ''}</td><td>{format(part.risk)}</td><td>{format(part.originalWeight * 100)} %</td><td>{format(part.effectiveWeight * 100)} %</td><td>{format(part.contribution)}</td></tr>)}</tbody>

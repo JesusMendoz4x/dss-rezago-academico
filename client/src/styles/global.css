@@ -220,3 +220,20 @@ tbody tr:hover { background: #f5f8fe; }
 .checkbox-filter input { width: 18px; height: 18px; accent-color: var(--accent); }
 @media (min-width: 1500px) { .comparison-configs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 760px) { .comparison-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Capacidad de atención */
+.capacity-panel { margin-top: 28px; padding: 24px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface); box-shadow: var(--shadow); }
+.capacity-form { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 16px; }
+.capacity-form label { display: flex; flex-direction: column; gap: 6px; font-size: .9375rem; color: var(--muted); }
+.capacity-form input { font: inherit; border: 1px solid #aabbd2; border-radius: 8px; padding: 10px 12px; color: #172d45; width: 140px; min-height: 44px; }
+.capacity-form input[aria-invalid="true"] { border-color: #a3243f; }
+.capacity-error { color: #a3243f; font-size: .9375rem; margin-top: 12px; }
+.capacity-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 12px 0 0; }
+.capacity-stats > div { border-top: 1px solid var(--border); padding-top: 12px; }
+.capacity-stats dt { color: var(--muted); font-size: .875rem; }
+.capacity-stats dd { font-size: 1.75rem; font-weight: 650; margin: 6px 0 0; font-variant-numeric: tabular-nums; }
+.plan-scheduled { background: #eaf1ff; color: #1f4f9f; }
+.plan-pending { background: #fff1d6; color: #78500d; }
+.plan-monitoring { background: #e3f5ed; color: #126044; }
+.plan-complete_data { background: #edf1f6; color: #47586f; }
+@media (max-width: 480px) { .capacity-panel { padding: 16px; } .capacity-stats { grid-template-columns: 1fr; } .capacity-form label { width: 100%; } }

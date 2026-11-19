@@ -13,7 +13,7 @@
 
 ## Próximos avances, uno por entrega
 
-1. Capacidad del tutor: definir N casos, mostrar cuáles puede atender y cuántos quedan fuera sin ocultarlos.
+1. Capacidad del tutor implementada en Resumen: N casos, pendientes visibles y filtros sin alterar asignación. Validación visual pendiente.
 2. Parámetros editables: validar pesos y umbrales y recalcular con una configuración identificable.
 3. Integración MySQL: comprobar carga real, consultar un lote seleccionado y guardar configuraciones/resultados históricos.
 4. Cierre de validación: ejecutar suite completa con Node, revisar navegador en móvil/escritorio, completar matriz, evidencias y guion final.
