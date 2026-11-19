@@ -1,4 +1,4 @@
-# Servicios DSS pendientes
+# Servicios DSS
 
 - `etl/`: leer los cuatro CSV, normalizar identificadores y fechas, validar rangos y referencias, detectar duplicados y producir reporte de calidad. Registrar archivo, fila, campo, valor y motivo de cada rechazo.
 - `indicators/`: asistencia, promedio, entregas y tendencia por estudiante y ventana temporal. Conservar referencias a las filas de origen; no sustituir faltantes por cero.

@@ -10,8 +10,9 @@
 ## Iteraci?n 2: datos
 
 - [ ] Generador ficticio reproducible y manifiesto.
-- [ ] ETL con comando ?nico, validaci?n, rechazos, correcciones y reporte.
-- [ ] Carga transaccional e indicadores por ventana temporal.
+- [x] ETL con comando único, validación, rechazos, correcciones y reporte.
+- [x] Implementar carga transaccional (validación contra MySQL real pendiente).
+- [ ] Indicadores por ventana temporal.
 
 ## Iteraci?n 3: decisiones e interfaz
 

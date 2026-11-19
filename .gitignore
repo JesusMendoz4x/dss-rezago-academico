@@ -23,3 +23,6 @@ data/rejected/*
 .idea/
 .DS_Store
 Thumbs.db
+
+# Evidencias generadas del ETL
+data/etl-runs/

@@ -16,7 +16,10 @@
     "build": "npm run build -w client",
     "start": "npm start -w server",
     "data:generate": "node server/scripts/generate-fixtures.js",
-    "data:check": "node server/scripts/generate-fixtures.js --check"
+    "data:check": "node server/scripts/generate-fixtures.js --check",
+    "etl": "node server/scripts/run-etl.js",
+    "etl:load": "node server/scripts/run-etl.js --load",
+    "test:etl": "node --test server/tests/etl.test.js"
   },
   "devDependencies": {
     "concurrently": "^9.2.0"

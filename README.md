@@ -6,7 +6,7 @@ Stack: **MySQL, Express, React y Node.js**, con JavaScript y m?dulos ES. Cliente
 
 ## Estado
 
-Estructura inicial: API de salud, lectura de escenarios, comprobaci?n de conexi?n MySQL y pantalla inicial React. ETL, indicadores, clasificaci?n, persistencia de recomendaciones y vistas de an?lisis est?n pendientes. No se incluyen estudiantes ni m?tricas ficticias presentadas como resultados.
+API de salud, escenarios, conexión MySQL y pantalla inicial React. ETL implementado con evidencias locales y carga transaccional. Indicadores, clasificación y vistas de análisis siguen pendientes. Los datos disponibles son completamente ficticios.
 
 ## Instalaci?n
 
@@ -57,7 +57,7 @@ server/
   src/repositories/     Consultas y persistencia
   config/               Escenarios versionados
   tests/                Espacio para pruebas futuras
-  scripts/              Futuros comandos ETL
+  scripts/              Comandos de datos y ETL
  database/              Esquema MySQL y futuras migraciones
  data/                  Fuentes CSV, datos preparados y rechazos
  docs/                  Arquitectura, diccionario y plan de trabajo
@@ -66,3 +66,7 @@ server/
 Solo se utilizar?n datos ficticios y c?digos de estudiante. El ?ndice orientar? el acompa?amiento; la decisi?n final ser? del tutor.
 
 Consultar [arquitectura](docs/arquitectura.md), [diccionario](docs/diccionario-datos.md) y [plan de trabajo](docs/plan.md).
+
+## ETL
+
+Ejecutar `npm run etl` para producir datos limpios y evidencias; `npm run etl:load` para cargar MySQL y `npm run test:etl` para validar. Ver [proceso ETL](docs/etl.md).

@@ -28,4 +28,4 @@ La clave estudiante-fecha de asistencia supone una sesi?n diaria. Si hay varias,
 
 ## Alcance de esta entrega
 
-Solo arranque, conexi?n configurable, escenarios y esquema inicial. No se implement? autenticaci?n, importaci?n, agregaci?n, clasificaci?n ni comparador. No se despleg? el sistema. En desarrollo Vite aplica proxy a Express; en producci?n se necesita un servidor para los est?ticos y `/api`.
+Arranque, escenarios, esquema y ETL implementados. El ETL incluye evidencias locales y carga transaccional MySQL; ver [proceso ETL](etl.md). Autenticación, indicadores, clasificación, comparador e interfaz de calidad siguen pendientes. No se desplegó el sistema.
