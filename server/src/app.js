@@ -1,4 +1,5 @@
 import express from 'express';
+import { qualityRouter } from './modules/quality/quality.routes.js';
 import { healthRouter } from './modules/health/health.routes.js';
 import { scenariosRouter } from './modules/scenarios/scenarios.routes.js';
 import { errorHandler, notFound } from './middleware/errors.js';
@@ -8,5 +9,6 @@ app.disable('x-powered-by');
 app.use(express.json({ limit: '1mb' }));
 app.use('/api/health', healthRouter);
 app.use('/api/scenarios', scenariosRouter);
+app.use('/api/quality', qualityRouter);
 app.use(notFound);
 app.use(errorHandler);

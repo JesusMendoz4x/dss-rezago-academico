@@ -69,3 +69,9 @@ El catálogo es compartido: si un código existente tiene otro grupo o programa,
 ## Validación pendiente en infraestructura
 
 Node.js y MySQL no están disponibles en la terminal de creación. Las pruebas automatizadas se incluyen para ejecutarlas con Node.js 24. Ocho pruebas del núcleo y del repositorio pasaron en V8, usando las mismas pruebas de Node con adaptadores de lectura y aserciones. Incluyen comparación de referencias y conexión MySQL simulada. La prueba de archivos locales de la suite Node y la integración con una instancia MySQL real siguen pendientes. No se ha implementado todavía el cálculo de indicadores, el índice de riesgo ni la interfaz para visualizar la calidad.
+
+## Consulta desde la interfaz
+
+La sección Calidad de datos consulta `GET /api/quality`. Este endpoint lee las fuentes y ejecuta la transformación en memoria: devuelve reporte, incidencias y manifiesto, sin escribir evidencias ni cargar MySQL. Para guardar el proceso y cargar la base se mantienen los comandos CLI anteriores.
+
+La interfaz permite volver a validar y filtrar por fuente, tratamiento o texto. Los conteos corresponden a los CSV actuales, no a un lote importado. Si faltan fuentes, muestra un error; no sustituye resultados con cifras del fixture.

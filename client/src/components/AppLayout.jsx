@@ -1,25 +1,31 @@
 import Icon from './Icon.jsx';
 
 const upcoming = [
-  { name: 'Calidad de datos', icon: 'quality' },
   { name: 'Estudiantes', icon: 'students' },
   { name: 'Comparar escenarios', icon: 'scenarios' },
 ];
 
-export default function AppLayout({ children }) {
+export default function AppLayout({ children, page }) {
   return (
     <div className="app-layout">
-      <a className="skip-link" href="#main-content">Saltar al contenido</a>
+      <a className="skip-link" href="#main-content" onClick={(event) => {
+        event.preventDefault();
+        const main = document.getElementById('main-content');
+        main?.focus();
+        main?.scrollIntoView({ block: 'start' });
+      }}>Saltar al contenido</a>
       <aside className="sidebar" aria-label="Menú principal">
-        <a className="brand" href="#main-content" aria-label="Aula, inicio">
+        <a className="brand" href="#/" aria-label="Aula, inicio">
           <span className="brand-mark"><Icon name="book" /></span>
           <span><strong>Aula</strong><small>Seguimiento académico</small></span>
         </a>
         <nav aria-label="Navegación principal">
           <p className="nav-label">ESPACIO DE TRABAJO</p>
-          <a className="nav-item is-active" href="#main-content" aria-current="page">
-            <Icon name="overview" /><span>Resumen</span>
-          </a>
+          {[{ id: 'overview', name: 'Resumen', href: '#/', icon: 'overview' }, { id: 'quality', name: 'Calidad de datos', href: '#/calidad', icon: 'quality' }].map((item) => (
+            <a className={`nav-item${page === item.id ? ' is-active' : ''}`} href={item.href} aria-current={page === item.id ? 'page' : undefined} key={item.id}>
+              <Icon name={item.icon} /><span>{item.name}</span>
+            </a>
+          ))}
           <p className="nav-label upcoming-label">PRÓXIMAMENTE</p>
           {upcoming.map((item) => (
             <span className="nav-item is-unavailable" aria-disabled="true" key={item.name}>
@@ -35,7 +41,7 @@ export default function AppLayout({ children }) {
       </aside>
       <div className="workspace">
         <header className="topbar">
-          <p>Espacio del tutor <span aria-hidden="true">/</span> <strong>Resumen</strong></p>
+          <p>Espacio del tutor <span aria-hidden="true">/</span> <strong>{page === 'quality' ? 'Calidad de datos' : 'Resumen'}</strong></p>
           <span className="demo-label">Datos ficticios</span>
         </header>
         <main id="main-content" className="main-content" tabIndex={-1}>{children}</main>

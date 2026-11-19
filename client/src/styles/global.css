@@ -99,3 +99,52 @@ h1 { font-size: clamp(1.8rem, 3vw, 2.25rem); letter-spacing: -.035em; margin-bot
   .topbar { flex-wrap: wrap; gap: 8px; }
   .main-content { padding-inline: 16px; }
 }
+
+/* Calidad de datos */
+.nav-item:not(.is-active):not(.is-unavailable):hover { background: #f0f5f2; }
+.button-secondary { flex-shrink: 0; border: 1px solid #b7cfc2; border-radius: 8px; padding: 10px 16px; background: white; color: var(--accent); font-weight: 600; cursor: pointer; }
+.button-secondary:hover:not(:disabled) { background: #e9f3ee; }
+.button-secondary:disabled { cursor: wait; color: var(--muted); }
+.validation-note { color: var(--muted); padding: 14px 18px; background: #e9f3ee; border-radius: 8px; font-size: .9375rem; margin-bottom: 24px; }
+.metric-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.metric-card { padding: 20px; border: 1px solid var(--border); border-radius: 12px; background: white; }
+.metric-card p { margin-bottom: 10px; font-size: .875rem; color: var(--muted); }
+.metric-card strong { font-size: 2rem; line-height: 1.2; font-weight: 650; font-variant-numeric: tabular-nums; }
+.metric-aceptados strong { color: #166552; }
+.metric-rechazados strong, .metric-conflictos strong { color: #943f31; }
+.metric-explanation { color: var(--muted); font-size: .875rem; margin-top: 14px; }
+.quality-section { margin-top: 32px; }
+.table-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; background: white; }
+table { width: 100%; border-collapse: collapse; text-align: left; font-size: .875rem; }
+th, td { padding: 14px 16px; border-bottom: 1px solid #e5ece8; vertical-align: top; }
+thead th { background: #edf3ef; font-weight: 600; white-space: nowrap; }
+tbody th { font-weight: 600; }
+tbody tr:last-child > * { border-bottom: none; }
+tbody tr:hover { background: #f8faf9; }
+.numeric { text-align: right; font-variant-numeric: tabular-nums; }
+.filter-bar { display: flex; flex-wrap: wrap; gap: 16px; }
+.filter-bar label { display: flex; flex-direction: column; gap: 6px; flex: 1 1 180px; min-width: 0; color: var(--muted); font-size: .875rem; font-weight: 500; }
+.filter-bar input, .filter-bar select { width: 100%; min-height: 44px; border: 1px solid #b7cfc2; border-radius: 8px; padding: 10px 12px; color: #203a37; background-color: white; }
+.filter-bar select { appearance: none; padding-right: 36px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23526b64' stroke-width='1.5'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+.filter-bar input::placeholder { color: #65756d; }
+.results-count { color: var(--muted); font-size: .875rem; margin: 16px 0 12px; }
+.anomalies-table { min-width: 900px; }
+.anomalies-table td:last-child { min-width: 230px; }
+.cell-detail { display: block; font-size: .8125rem; color: var(--muted); margin-top: 4px; }
+.action-badge { display: inline-block; padding: 3px 9px; font-size: .875rem; border-radius: 6px; background: #edf1f0; color: #465b53; white-space: nowrap; }
+.action-corrected { background: #e6f2ec; color: #145b42; }
+.action-rejected, .action-conflict { background: #fbece8; color: #943f31; }
+.action-duplicate { background: #fff2d8; color: #795314; }
+.value-cell { max-width: 260px; min-width: 100px; overflow-wrap: anywhere; font-family: ui-monospace, monospace; }
+.muted { color: var(--muted); font-family: "Segoe UI", system-ui, sans-serif; }
+.trace-details { margin-top: 28px; padding: 18px; border: 1px solid var(--border); border-radius: 10px; font-size: .875rem; color: var(--muted); }
+.trace-details summary { cursor: pointer; font-weight: 600; }
+.trace-details p { margin-top: 12px; }
+.trace-details code { display: block; overflow-wrap: anywhere; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+@media (min-width: 1500px) { .metric-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+@media (max-width: 760px) {
+  .metric-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .page-heading { flex-wrap: wrap; }
+  .metric-card { padding: 16px; }
+}
