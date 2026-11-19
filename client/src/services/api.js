@@ -19,3 +19,7 @@ export function getQuality(signal) {
 export function getStudents(window, signal) {
   return get(`/api/students?window=${encodeURIComponent(window)}`, signal, 'No se pudieron consultar los estudiantes. Verifica que la API esté en ejecución.');
 }
+
+export function getRecommendations(scenario, signal) {
+  return get(`/api/recommendations?scenario=${encodeURIComponent(scenario)}`, signal, 'No se pudo calcular la priorización. Verifica que la API esté en ejecución.');
+}

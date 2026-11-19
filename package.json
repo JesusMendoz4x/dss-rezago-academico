@@ -22,7 +22,8 @@
     "test:etl": "node --test server/tests/etl.test.js",
     "doctor": "node scripts/check-installation.mjs",
     "predev": "node scripts/check-installation.mjs",
-    "test:indicators": "node --test server/tests/indicators.test.js"
+    "test:indicators": "node --test server/tests/indicators.test.js",
+    "test:risk": "node --test server/tests/risk.test.js"
   },
   "devDependencies": {
     "concurrently": "^9.2.0"

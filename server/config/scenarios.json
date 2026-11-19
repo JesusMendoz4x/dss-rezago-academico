@@ -114,7 +114,7 @@
     "ventanaSemanas": null,
     "capacidadTutor": null,
     "id": "sensible",
-    "nombre": "Umbral m?s sensible"
+    "nombre": "Umbral más sensible"
   },
   {
     "version": "1.0.0",
@@ -153,6 +153,6 @@
     "ventanaSemanas": 4,
     "capacidadTutor": null,
     "id": "ventana-corta",
-    "nombre": "?ltimas cuatro semanas"
+    "nombre": "Últimas cuatro semanas"
   }
 ]

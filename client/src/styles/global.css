@@ -164,3 +164,16 @@ tbody tr:hover { background: #f8faf9; }
   .student-detail { padding: 16px; }
   .student-detail .metric-grid { grid-template-columns: 1fr; }
 }
+
+/* Priorización explicable */
+.risk-summary { margin-top: 20px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.risk-alto { background: #fbece8; color: #943f31; }
+.risk-medio { background: #fff2d8; color: #795314; }
+.risk-bajo { background: #e6f2ec; color: #145b42; }
+.risk-sin_dictamen { background: #edf1f0; color: #465b53; }
+.students-table .recommendation-action { white-space: normal; min-width: 220px; }
+.risk-score { font-size: 2.25rem; font-weight: 650; margin-bottom: 8px; color: var(--accent); }
+.risk-score span { font-size: 1rem; font-weight: 400; color: var(--muted); }
+.trace-details details { padding-top: 14px; }
+.trace-details li { overflow-wrap: anywhere; }
+@media (max-width: 760px) { .risk-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
