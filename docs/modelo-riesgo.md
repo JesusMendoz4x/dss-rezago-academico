@@ -23,6 +23,6 @@ La respuesta incluye indicadores, conteos, registros de origen, riesgos parciale
 
 E-0007 debe producir 66.75, alto y mixto. Las pruebas de `npm.cmd run test:risk` comparan los 30 estudiantes contra los resultados esperados, verifican umbrales, insuficiencia, ajustes de pesos y escenarios.
 
-El selector muestra un escenario por vez. El comparador simultáneo, parámetros editables y capacidad del tutor se implementarán después. Los datos son ficticios y los criterios no son parámetros institucionales validados. El índice orienta el apoyo, no decide acreditación ni sanciones.
+El Resumen muestra un escenario por vez. La sección Comparar escenarios consulta `/api/recommendations/compare?left=base&right=asistencia`, que calcula ambos escenarios con una misma extracción y compara índice, nivel y posición. Admite filtros de grupo, código y solo cambios. Sin dictamen se muestra como no comparable numéricamente. Los parámetros editables y la capacidad del tutor siguen pendientes. Los datos son ficticios y los criterios no son parámetros institucionales validados. El índice orienta el apoyo, no decide acreditación ni sanciones.
 
 En el fixture actual los perfiles de asistencia y desempeño están correlacionados: priorizar asistencia cambia los índices, pero no necesariamente el orden ni el nivel. Las pruebas incluyen además dos perfiles controlados con riesgos opuestos para comprobar una inversión de prioridades. No se fuerza un cambio visual si el cálculo no lo produce.

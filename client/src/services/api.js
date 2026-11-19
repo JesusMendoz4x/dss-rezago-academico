@@ -23,3 +23,7 @@ export function getStudents(window, signal) {
 export function getRecommendations(scenario, signal) {
   return get(`/api/recommendations?scenario=${encodeURIComponent(scenario)}`, signal, 'No se pudo calcular la priorización. Verifica que la API esté en ejecución.');
 }
+
+export function getComparison(left, right, signal) {
+  return get(`/api/recommendations/compare?left=${encodeURIComponent(left)}&right=${encodeURIComponent(right)}`, signal, 'No se pudieron comparar los escenarios. Verifica que la API esté en ejecución.');
+}

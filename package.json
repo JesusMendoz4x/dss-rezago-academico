@@ -23,7 +23,8 @@
     "doctor": "node scripts/check-installation.mjs",
     "predev": "node scripts/check-installation.mjs",
     "test:indicators": "node --test server/tests/indicators.test.js",
-    "test:risk": "node --test server/tests/risk.test.js"
+    "test:risk": "node --test server/tests/risk.test.js",
+    "test:compare": "node --test server/tests/compare.test.js"
   },
   "devDependencies": {
     "concurrently": "^9.2.0"
