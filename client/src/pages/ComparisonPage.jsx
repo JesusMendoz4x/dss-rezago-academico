@@ -53,7 +53,8 @@ export default function ComparisonPage() {
     {status === 'loading' && <p className="feedback" role="status">Calculando ambos escenarios desde las mismas fuentes…</p>}
     {status === 'error' && <p className="feedback feedback-error" role="alert">{error}</p>}
     {status === 'ready' && result && <>
-      <p className="validation-note">Datos ficticios · Corte: {result.manifest.configuration.fecha_corte}. Ambos escenarios usan las mismas fuentes; cada uno aplica su ventana y criterios. La comparación no guarda cambios.</p>
+      <p className="results-count">Corte: {result.manifest.configuration.fecha_corte}</p>
+
       {left === right && <p className="feedback">Elegiste el mismo escenario en ambos lados; los resultados serán iguales.</p>}
       <div className="scenario-grid comparison-configs"><ScenarioCard config={result.left} label="ESCENARIO A" /><ScenarioCard config={result.right} label="ESCENARIO B" /></div>
       <section className="metric-grid comparison-summary" aria-label="Cambios en el conjunto completo">
@@ -64,14 +65,14 @@ export default function ComparisonPage() {
           ['Sin comparación numérica', result.students.filter((s) => s.delta == null).length],
         ].map(([label, value]) => <article className="metric-card" key={label}><p>{label}</p><strong>{value}</strong></article>)}
       </section>
-      <section className="quality-section" aria-labelledby="comparison-title"><div className="section-heading"><div><h2 id="comparison-title">Resultado por estudiante</h2><p>La variación del índice es B menos A. Subir posiciones significa aparecer antes en la lista general del escenario B.</p></div></div>
+      <section className="quality-section" aria-labelledby="comparison-title"><div className="section-heading"><div><h2 id="comparison-title">Resultado por estudiante</h2></div></div>
         <div className="filter-bar"><label>Grupo<select value={group} onChange={(event) => setGroup(event.target.value)}><option value="">Todos los grupos</option>{groups.map((name) => <option key={name}>{name}</option>)}</select></label>
           <label>Buscar código<input type="search" value={query} placeholder="Ej. E-0007" onChange={(event) => setQuery(event.target.value)} /></label>
         </div>
         <label className="checkbox-filter"><input type="checkbox" checked={onlyChanges} onChange={(event) => setOnlyChanges(event.target.checked)} />Mostrar solo estudiantes con cambios</label>
-        <p className="results-count" role="status">{filtered.length} de {result.students.length} estudiantes. Los contadores superiores corresponden al conjunto completo.</p>
+        <p className="results-count" role="status">{filtered.length} de {result.students.length} estudiantes.</p>
         {!filtered.length ? <p className="feedback">No hay estudiantes con estos filtros. Cambiar un criterio no siempre cambia el orden o el nivel.</p> : <div className="table-scroll" role="region" aria-label="Comparación por estudiante, desplazamiento horizontal" tabIndex={0}><table className="comparison-table">
-          <caption className="sr-only">Índice, nivel, prioridad y acción por escenario</caption><thead><tr>{['Estudiante', 'Grupo', 'Escenario A', 'Escenario B', 'Variación del índice', 'Posición en A / B', 'Cambio de prioridad'].map((title) => <th scope="col" key={title}>{title}</th>)}</tr></thead>
+          <caption className="sr-only">Índice, nivel, prioridad y acción por escenario</caption><thead><tr>{['Estudiante', 'Grupo', 'Escenario A', 'Escenario B', 'Variación B − A', 'Posición en A / B', 'Cambio de prioridad'].map((title) => <th scope="col" key={title}>{title}</th>)}</tr></thead>
           <tbody>{filtered.map((student) => <tr key={student.id}><th scope="row">{student.id}</th><td>{student.group}</td>
             {[student.left, student.right].map((value, index) => <td key={index}><strong>{value.index == null ? 'Sin dictamen' : `${format(value.index)} / 100`}</strong><span className="cell-detail"><span className={`action-badge risk-${value.level}`}>{levels[value.level]}</span></span><span className="cell-detail">{value.action}</span></td>)}
             <td>{difference(student.delta)}</td><td>{student.left.position ?? 'Sin posición'} / {student.right.position ?? 'Sin posición'}</td>
@@ -79,7 +80,7 @@ export default function ComparisonPage() {
           </tr>)}</tbody>
         </table></div>}
       </section>
-      <p className="metric-explanation">Sin dictamen significa que falta información para emitir una recomendación. No equivale a riesgo cero. El índice orienta al tutor y no determina sanciones ni acreditación.</p>
+
     </>}
   </>;
 }

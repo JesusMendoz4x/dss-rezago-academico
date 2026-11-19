@@ -50,7 +50,7 @@ export default function StudentsPage() {
         <h1>Estudiantes</h1>
         <p>Consulta indicadores descriptivos y los registros que los sustentan.</p>
       </div><button className="button-secondary" type="button" disabled={status === 'loading'} onClick={() => setRevision((value) => value + 1)}>Actualizar datos</button></div>
-      <p className="validation-note">Datos ficticios calculados desde CSV validados. Esta consulta no carga MySQL ni emite recomendaciones de riesgo.</p>
+
       <div className="filter-bar">
         <label>Periodo<select value={period} onChange={(event) => { setSelectedId(null); setPeriod(event.target.value); }}>
           <option value="all">Periodo completo</option><option value="4">Últimas cuatro semanas</option>
@@ -96,7 +96,7 @@ export default function StudentsPage() {
           </div>
           {selected.missing.length > 0 && <div className="feedback"><strong>Datos insuficientes para el futuro modelo</strong><ul>{selected.missing.map((message) => <li key={message}>{message}</li>)}</ul></div>}
           {selected.warnings.length > 0 && <ul className="indicator-warnings">{selected.warnings.map((message) => <li key={message}>{message}</li>)}</ul>}
-          <p className="metric-explanation">Los valores ausentes no se sustituyen por cero. Cubrir los mínimos no garantiza que todos los indicadores sean calculables.</p>
+
           {sourceSections.map(([key, title, headers]) => <details className="trace-details" key={key}><summary>{title} ({selected.sources[key].length})</summary>
             {!selected.sources[key].length ? <p>No hay registros válidos en esta ventana.</p> : <div className="table-scroll" role="region" aria-label={title} tabIndex={0}><table>
               <caption className="sr-only">{title} de {selected.id} y procedencia en CSV</caption><thead><tr>{[...headers, 'Origen'].map((header) => <th scope="col" key={header}>{header}</th>)}</tr></thead>

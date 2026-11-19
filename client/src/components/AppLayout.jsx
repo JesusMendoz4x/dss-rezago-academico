@@ -31,7 +31,6 @@ export default function AppLayout({ children, page }) {
       <div className="workspace">
         <header className="topbar">
           <p>Espacio del tutor <span aria-hidden="true">/</span> <strong>{page === 'quality' ? 'Calidad de datos' : page === 'students' ? 'Estudiantes' : page === 'comparison' ? 'Comparar escenarios' : 'Resumen'}</strong></p>
-          <span className="demo-label">Datos ficticios</span>
         </header>
         <main id="main-content" className="main-content" tabIndex={-1}>{children}</main>
         <footer className="workspace-footer">Acompañamiento académico con decisiones explicables.</footer>

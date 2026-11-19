@@ -41,7 +41,7 @@ export default function DashboardPage() {
       <div className="page-heading"><div><p className="section-kicker">EVIDENCIA PARA ACOMPAÑAR</p><h1>Resumen académico</h1><p>Identifica a quién dar seguimiento y comprende qué sustenta cada prioridad.</p></div>
         <button type="button" className="button-secondary" disabled={status === 'loading'} onClick={() => setRevision((value) => value + 1)}>Actualizar análisis</button>
       </div>
-      <p className="validation-note">Análisis de datos ficticios desde CSV validados. Los criterios son supuestos académicos configurables; la decisión final corresponde al tutor. No se guarda esta consulta en MySQL.</p>
+
       <div className="filter-bar">
         <label>Escenario<select value={scenario} onChange={(event) => { setSelectedId(null); setScenario(event.target.value); }}>
           {!scenarios.length && <option value="base">Base</option>}{scenarios.map((config) => <option key={config.id} value={config.id}>{config.nombre}</option>)}
@@ -54,9 +54,9 @@ export default function DashboardPage() {
         <section className="metric-grid risk-summary" aria-label="Resumen de todos los estudiantes del escenario">
           {Object.entries(levels).map(([key, label]) => <article className={`metric-card summary-${key}`} key={key}><p>{label}</p><strong>{students.filter((student) => student.level === key).length}</strong></article>)}
         </section>
-        <p className="metric-explanation">Resumen del escenario completo. Los filtros siguientes solo modifican la lista; la posición pertenece al orden general.</p>
+
         <section className="quality-section" aria-labelledby="priorities-title">
-          <div className="section-heading"><div><h2 id="priorities-title">Prioridad de seguimiento</h2><p>Orden descendente por índice, con desempate por código. Los casos sin dictamen aparecen al final.</p></div></div>
+          <div className="section-heading"><div><h2 id="priorities-title">Prioridad de seguimiento</h2></div></div>
           <div className="filter-bar">
             <label>Grupo<select value={group} onChange={(event) => { setGroup(event.target.value); setSelectedId(null); }}><option value="">Todos los grupos</option>{groups.map((name) => <option key={name}>{name}</option>)}</select></label>
             <label>Nivel<select value={level} onChange={(event) => { setLevel(event.target.value); setSelectedId(null); }}><option value="">Todos los niveles</option>{Object.entries(levels).map(([key, label]) => <option key={key} value={key}>{label}</option>)}</select></label>
@@ -64,7 +64,7 @@ export default function DashboardPage() {
           </div>
           <p className="results-count" role="status">{filtered.length} estudiantes en la lista</p>
           {!filtered.length ? <p className="feedback">No hay estudiantes con estos filtros.</p> : <div className="table-scroll" role="region" aria-label="Lista priorizada, desplazamiento horizontal" tabIndex={0}>
-            <table className="students-table"><caption className="sr-only">Prioridad y acción sugerida por estudiante</caption><thead><tr>{['Posición', 'Estudiante', 'Grupo', 'Índice / 100', 'Nivel', 'Tipo', 'Acción sugerida', 'Explicación'].map((name) => <th scope="col" key={name}>{name}</th>)}</tr></thead>
+            <table className="students-table"><caption className="sr-only">Prioridad y acción sugerida por estudiante</caption><thead><tr>{['Posición general', 'Estudiante', 'Grupo', 'Índice / 100', 'Nivel', 'Tipo', 'Acción sugerida', 'Explicación'].map((name) => <th scope="col" key={name}>{name}</th>)}</tr></thead>
               <tbody>{filtered.map((student) => <tr key={student.id} className={selectedId === student.id ? 'selected-row' : ''}>
                 <td>{student.position ?? 'No aplica'}</td><th scope="row">{student.id}</th><td>{student.group}</td><td>{student.index == null ? 'Sin dictamen' : format(student.index)}</td>
                 <td><span className={`action-badge risk-${student.level}`}>{levels[student.level]}</span></td><td>{student.riskType || 'No aplica'}</td><td className="recommendation-action">{student.action}</td>
@@ -77,10 +77,10 @@ export default function DashboardPage() {
           <div className="section-heading"><div><p className="section-kicker">RECOMENDACIÓN EXPLICABLE</p><h2 id="risk-detail-title" tabIndex={-1} ref={heading}>{selected.id} · {levels[selected.level]}</h2><p>{selected.action}</p></div>
             <button type="button" className="button-secondary" onClick={() => { document.querySelector(`[aria-label="Explicar ${selected.id}"]`)?.focus(); setSelectedId(null); }}>Cerrar explicación</button>
           </div>
-          {selected.index != null && <><p className="risk-score">{format(selected.index)} <span>de 100 puntos</span></p><p className="metric-explanation">{selected.rule}</p>
+          {selected.index != null && <><p className="risk-score">{format(selected.index)} <span>de 100 puntos</span></p>
             <div className="table-scroll" role="region" aria-label="Cálculo del índice, desplazamiento horizontal" tabIndex={0}><table><caption className="sr-only">Componentes del índice de {selected.id}</caption><thead><tr>{['Componente', 'Indicador', 'Riesgo / 100', 'Peso original', 'Peso efectivo', 'Aportación'].map((name) => <th scope="col" key={name}>{name}</th>)}</tr></thead>
               <tbody>{selected.components.map((part) => <tr key={part.name}><th scope="row">{names[part.name]}</th><td>{format(part.value)}{['asistencia', 'entregas'].includes(part.name) ? ' %' : ''}</td><td>{format(part.risk)}</td><td>{format(part.originalWeight * 100)} %</td><td>{format(part.effectiveWeight * 100)} %</td><td>{format(part.contribution)}</td></tr>)}</tbody>
-            </table></div><p className="metric-explanation">El índice suma las aportaciones sin redondear. El redondeo mostrado puede producir pequeñas diferencias al sumar la tabla.</p></>}
+            </table></div></>}
           {selected.missing.length > 0 && <div className="feedback"><strong>Información pendiente</strong><ul>{selected.missing.map((text) => <li key={text}>{text}</li>)}</ul></div>}
           {selected.warnings.length > 0 && <ul className="indicator-warnings">{selected.warnings.map((text) => <li key={text}>{text}</li>)}</ul>}
           <details className="trace-details"><summary>Datos y configuración utilizados</summary>
@@ -90,7 +90,7 @@ export default function DashboardPage() {
             {Object.entries(selected.sources).map(([key, rows]) => <details key={key}><summary>{({ attendance: 'Asistencia', evaluations: 'Evaluaciones', submissions: 'Entregas' })[key]}: {rows.length} registros</summary><ul>{rows.map((row) => <li key={row.fila}>{row.archivo}, línea {row.fila}: {row.values.join(' · ')}</li>)}</ul></details>)}
           </details>
         </section>}
-        <p className="metric-explanation">El índice orienta el acompañamiento. No determina acreditación, sanciones ni diagnósticos.</p>
+
       </>}
     </>
   );

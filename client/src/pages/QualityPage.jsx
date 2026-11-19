@@ -3,7 +3,7 @@ import { getQuality } from '../services/api.js';
 
 const actions = { corrected: 'Corrección', rejected: 'Rechazo', duplicate: 'Duplicado', conflict: 'Conflicto' };
 const metrics = [
-  ['leidos', 'Registros leídos'], ['aceptados', 'Aceptados'], ['corregidos', 'Corregidos'],
+  ['leidos', 'Registros leídos'], ['aceptados', 'Aceptados'], ['corregidos', 'Corregidos (incluidos)'],
   ['rechazados', 'Rechazados'], ['duplicados', 'Duplicados'], ['conflictos', 'En conflicto'],
 ];
 const number = new Intl.NumberFormat('es-MX');
@@ -55,7 +55,7 @@ export default function QualityPage() {
           {status === 'loading' ? 'Validando…' : 'Volver a validar'}
         </button>
       </div>
-      <p className="validation-note">Validación de los CSV actuales. Esta consulta no guarda evidencias ni carga datos en MySQL.</p>
+
       {status === 'loading' && <p className="feedback" role="status">Leyendo y validando las fuentes académicas…</p>}
       {status === 'error' && <p className="feedback feedback-error" role="alert">{error}</p>}
       {status === 'ready' && result && (
@@ -67,9 +67,9 @@ export default function QualityPage() {
               </article>
             ))}
           </section>
-          <p className="metric-explanation">Los corregidos están incluidos en los aceptados. Leídos = aceptados + rechazados + duplicados + conflictos.</p>
+
           <section className="quality-section" aria-labelledby="sources-title">
-            <div className="section-heading"><div><h2 id="sources-title">Resultado por fuente</h2><p>Fecha de corte: {result.manifest.configuration.fecha_corte}. Se conserva el origen de cada incidencia.</p></div></div>
+            <div className="section-heading"><div><h2 id="sources-title">Resultado por fuente</h2><p>Fecha de corte: {result.manifest.configuration.fecha_corte}.</p></div></div>
             <div className="table-scroll" role="region" aria-label="Conteos por archivo, desplazamiento horizontal" tabIndex={0}>
               <table>
                 <caption className="sr-only">Registros procesados por cada fuente CSV</caption>
@@ -81,7 +81,7 @@ export default function QualityPage() {
             </div>
           </section>
           <section className="quality-section" aria-labelledby="anomalies-title">
-            <div className="section-heading"><div><h2 id="anomalies-title">Detalle de incidencias</h2><p>Consulta el valor de origen, su tratamiento y la regla aplicada. Una fila puede generar varias incidencias.</p></div></div>
+            <div className="section-heading"><div><h2 id="anomalies-title">Detalle de incidencias</h2><p>Consulta el valor de origen, su tratamiento y la regla aplicada.</p></div></div>
             <div className="filter-bar">
               <label>Fuente<select value={file} onChange={(event) => setFile(event.target.value)}>
                 <option value="">Todas las fuentes</option>{Object.keys(result.report.archivos).map((name) => <option key={name} value={name}>{name}</option>)}
@@ -111,7 +111,7 @@ export default function QualityPage() {
               </div>
             )}
           </section>
-          <details className="trace-details"><summary>Identificación de las fuentes validadas</summary><p>La huella identifica el contenido y los parámetros de esta validación; no es un ID de importación en MySQL.</p><code>{result.manifest.fingerprint}</code></details>
+          <details className="trace-details"><summary>Identificación de las fuentes validadas</summary><code>{result.manifest.fingerprint}</code></details>
         </>
       )}
     </>
