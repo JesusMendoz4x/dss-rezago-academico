@@ -273,3 +273,44 @@ tbody tr:hover { background: #f5f8fe; }
 @media (max-width: 1050px) { .comparison-explorer { grid-template-columns: minmax(230px, 1fr) minmax(0, 1.5fr); } .option-results { grid-template-columns: 1fr; } .option-result + .option-result { border-left: 0; border-top: 1px solid var(--border); } .option-result h3 { min-height: 0; } }
 @media (max-width: 760px) { .comparison-explorer { grid-template-columns: 1fr; } .comparison-people { border-right: 0; padding-right: 0; } .comparison-people .filter-bar label { flex-basis: 180px; } .comparison-person-list { max-height: 280px; } .comparison-person-detail { border-top: 1px solid var(--border); padding: 24px 0 0; margin-top: 24px; } .option-results { grid-template-columns: repeat(2, minmax(0, 1fr)); } .option-result + .option-result { border-top: 0; border-left: 1px solid var(--border); } }
 @media (max-width: 480px) { .option-results { grid-template-columns: 1fr; } .option-result + .option-result { border-top: 1px solid var(--border); border-left: 0; } }
+
+/* Comparación guiada: intención y escala compartida */
+.reference-control { color: var(--muted); font-size: .9375rem; margin-bottom: 24px; }
+.reference-control summary { cursor: pointer; width: fit-content; }
+.reference-control label { display: flex; flex-direction: column; gap: 8px; max-width: 360px; margin-top: 12px; }
+.reference-control select { font: inherit; padding: 10px 12px; border: 1px solid #aabbd2; border-radius: 8px; color: #172d45; background: #fff; }
+.intention-picker { padding: 0; margin: 0; border: 0; min-width: 0; }
+.intention-picker legend { font-size: 1.25rem; font-weight: 600; margin-bottom: 16px; }
+.intention-options { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+.intention-options label { display: flex; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 2px solid transparent; color: var(--muted); cursor: pointer; font-size: .9375rem; }
+.intention-options label.is-chosen { border-bottom-color: var(--accent); color: var(--accent); font-weight: 600; }
+.intention-options input { width: 18px; height: 18px; margin: 0; accent-color: var(--accent); }
+.intention-description { color: var(--muted); margin: 14px 0 0; }
+.score-change { margin: 0 0 24px; }
+.score-change figcaption { font-size: 1.0625rem; font-weight: 600; }
+.score-change figcaption span { display: block; font-weight: 400; font-size: .875rem; color: var(--muted); margin-top: 4px; }
+.score-change svg { display: block; width: 100%; overflow: visible; margin-top: 16px; }
+.score-change svg text { fill: #52647b; font-family: inherit; font-size: 15px; }
+.score-grid { stroke: #dbe3ed; stroke-dasharray: 2 5; }
+.score-rail { stroke: #dbe3ed; stroke-width: 3; }
+.score-connection { stroke: #74869d; stroke-width: 2; stroke-dasharray: 5 4; }
+.score-before { fill: #52647b; stroke: #f1f5fa; stroke-width: 3; }
+.score-after { fill: #2459b8; stroke: #f1f5fa; stroke-width: 3; }
+.score-change svg .score-value { fill: #172d45; font-weight: 650; }
+.score-legend { display: flex; flex-wrap: wrap; gap: 10px 20px; font-size: .875rem; color: var(--muted); }
+.score-legend span { display: flex; gap: 8px; align-items: center; }
+.score-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+.legend-before { background: #52647b; }
+.legend-after { background: #2459b8; }
+.score-unavailable { padding: 18px 0; border-block: 1px solid var(--border); margin-bottom: 20px; color: var(--muted); }
+.option-results { background: transparent; }
+.option-result { padding-inline: 0; }
+.option-result + .option-result { background: transparent; padding-left: 20px; }
+.option-result h3 { min-height: 0; }
+.option-action { font-size: 1.0625rem; font-weight: 600; margin: 14px 0; }
+@media (max-width: 1050px) and (min-width: 761px) { .option-result + .option-result { padding-left: 0; } }
+@media (max-width: 480px) { .intention-options { display: grid; gap: 4px; } .intention-options label { width: fit-content; } .option-result + .option-result { padding-left: 0; } }
+
+.score-plot { overflow-x: auto; padding-block: 4px; }
+.score-change svg { min-width: 400px; }
+.score-change svg text { font-size: 18px; }

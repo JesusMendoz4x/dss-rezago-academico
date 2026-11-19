@@ -24,16 +24,36 @@ function outcome(student) {
   if (student.right.level === 'medio') return 'Pasa a seguimiento cercano';
   return 'Pasa a monitoreo regular';
 }
+const intentions = {
+  base: { label: 'Usar los criterios base' },
+  asistencia: { label: 'Dar más peso a la asistencia' },
+  sensible: { label: 'Detectar riesgo desde menos puntos' },
+  'ventana-corta': { label: 'Revisar solo las últimas semanas' },
+};
+function ScoreChange({ student, leftName, rightName }) {
+  if (student.left.index == null || student.right.index == null) return <div className="score-unavailable">Faltan datos para comparar ambas puntuaciones.</div>;
+  const x = (value) => 32 + Math.max(0, Math.min(100, value)) * 4.96;
+  return <figure className="score-change">
+    <figcaption>Puntuación de riesgo <span>Una puntuación mayor indica más riesgo.</span></figcaption>
+    <div className="score-plot" role="region" aria-label="Gráfica de puntuaciones, desplazamiento horizontal" tabIndex={0}><svg viewBox="0 0 560 160" role="img" aria-label={`${leftName}: ${format(student.left.index)} puntos. ${rightName}: ${format(student.right.index)} puntos.`}>
+      {[0, 25, 50, 75, 100].map((value) => <g key={value}><line x1={x(value)} x2={x(value)} y1="28" y2="120" className="score-grid" /><text x={x(value)} y="147" textAnchor="middle">{value}</text></g>)}
+      <line x1="32" x2="528" y1="48" y2="48" className="score-rail" />
+      <line x1="32" x2="528" y1="104" y2="104" className="score-rail" />
+      <line x1={x(student.left.index)} x2={x(student.right.index)} y1="48" y2="104" className="score-connection" />
+      <circle cx={x(student.left.index)} cy="48" r="7" className="score-before" />
+      <circle cx={x(student.right.index)} cy="104" r="7" className="score-after" />
+      <text x={x(student.left.index)} y="30" textAnchor="middle" className="score-value">{format(student.left.index)}</text>
+      <text x={x(student.right.index)} y="86" textAnchor="middle" className="score-value">{format(student.right.index)}</text>
+    </svg></div>
+    <div className="score-legend"><span><i className="legend-before" aria-hidden="true" />Referencia: {leftName}</span><span><i className="legend-after" aria-hidden="true" />Alternativa: {rightName}</span></div>
+  </figure>;
+}
 function OptionResult({ title, config, value }) {
   return <div className="option-result">
     <p className="option-label">{title}</p><h3>{config.nombre}</h3>
-    <span className={`action-badge risk-${value.level}`}>{levels[value.level]}</span>
     <p className="option-action">{value.action}</p>
-    {value.index == null ? <p className="option-missing">No hay información suficiente para calcular el riesgo.</p> : <>
-      <div className="option-score"><strong>{format(value.index)}</strong><span> / 100 puntos</span></div>
-      <meter min="0" max="100" value={value.index} aria-label={`Índice con ${config.nombre}`} />
-      <p className="option-position">Lugar {value.position} en la lista de seguimiento</p>
-    </>}
+    <span className={`action-badge risk-${value.level}`}>{levels[value.level]}</span>
+    {value.position != null && <p className="option-position">Lugar {value.position} en la lista</p>}
   </div>;
 }
 
@@ -65,18 +85,26 @@ export default function ComparisonPage() {
   const groups = [...new Set((result?.students || []).map((student) => student.group))].sort();
   const selected = filtered.find((student) => student.id === selectedId) || filtered[0];
   const changes = result ? criterionChanges(result.left, result.right) : [];
+  const optionConfig = configs.find((config) => config.id === right);
+  const changedScores = filtered.filter((student) => student.delta != null && Math.abs(student.delta) > 1e-9).length;
   const changedRecommendations = filtered.filter((student) => student.levelChanged).length;
   const changedPositions = filtered.filter((student) => student.positionChange != null && student.positionChange !== 0).length;
 
   return <div className="comparison-workspace">
-    <div className="page-heading"><div><p className="section-kicker">EXPLORAR OPCIONES</p><h1>¿Qué cambia en el seguimiento?</h1><p>Prueba otros criterios y revisa si un estudiante necesita una atención diferente.</p></div>
+    <div className="page-heading"><div><p className="section-kicker">EXPLORAR OPCIONES</p><h1>¿A quién atendería primero?</h1><p>Explora un cambio de criterio y consulta qué sucede con cada estudiante.</p></div>
       <button type="button" className="button-secondary" disabled={status === 'loading'} onClick={() => setRevision((value) => value + 1)}>Actualizar</button>
     </div>
     <section className="comparison-question" aria-label="Opciones a comparar">
-      <div className="filter-bar">
-        <label>Tomar como referencia<select value={left} onChange={(event) => setLeft(event.target.value)}>{!configs.length && <option value="base">Base</option>}{configs.map((config) => <option key={config.id} value={config.id}>{config.nombre}</option>)}</select></label>
-        <label>¿Qué pasa si uso…?<select value={right} onChange={(event) => setRight(event.target.value)}>{!configs.length && <option value="asistencia">Prioridad a asistencia</option>}{configs.map((config) => <option key={config.id} value={config.id}>{config.nombre}</option>)}</select></label>
-      </div>
+      <details className="reference-control"><summary>Referencia: {configs.find((config) => config.id === left)?.nombre || 'Base'}</summary>
+        <label>Cambiar referencia<select value={left} onChange={(event) => setLeft(event.target.value)}>{!configs.length && <option value="base">Base</option>}{configs.map((config) => <option key={config.id} value={config.id}>{config.nombre}</option>)}</select></label>
+      </details>
+      <fieldset className="intention-picker"><legend>¿Qué quieres explorar?</legend>
+        <div className="intention-options">{(configs.length ? configs : [{ id: 'asistencia', nombre: 'Prioridad a asistencia' }]).map((config) => <label className={right === config.id ? 'is-chosen' : ''} key={config.id}>
+          <input type="radio" name="comparison-intention" value={config.id} checked={right === config.id} onChange={() => setRight(config.id)} />
+          <span>{intentions[config.id]?.label || config.nombre}</span>
+        </label>)}</div>
+      </fieldset>
+      {optionConfig && <p className="intention-description">{right === 'asistencia' ? `La asistencia representa el ${format(optionConfig.pesos.asistencia * 100)} % de la puntuación.` : right === 'sensible' ? `Se considera riesgo alto desde ${optionConfig.umbrales.alto} puntos.` : optionConfig.ventanaSemanas ? `Se analizan las últimas ${optionConfig.ventanaSemanas} semanas.` : 'Se analizan los registros de todo el periodo.'}</p>}
       {status === 'ready' && result && <details className="criteria-changes"><summary>Qué criterios cambian</summary>
         {changes.length ? <ul>{changes.map((change) => <li key={change}>{change}</li>)}</ul> : <p>Ambas opciones usan los mismos criterios.</p>}
       </details>}
@@ -86,7 +114,7 @@ export default function ComparisonPage() {
     {status === 'ready' && result && <>
       <section className="comparison-reading" aria-label="Conclusión de la comparación">
         <h2>{filtered.length === 0 ? 'No hay estudiantes con estos filtros.' : filtered.every((student) => student.left.level === 'sin_dictamen' && student.right.level === 'sin_dictamen') ? 'Faltan datos para comparar el seguimiento.' : changedRecommendations === 0 ? 'Se mantiene el tipo de seguimiento.' : `El seguimiento cambia para ${changedRecommendations} ${changedRecommendations === 1 ? 'estudiante' : 'estudiantes'}.`}</h2>
-        <p>{filtered.length === 0 ? '' : filtered.every((student) => student.positionChange == null) ? 'No hay posiciones comparables entre los estudiantes mostrados.' : changedPositions === 0 ? 'No hay cambios de posición entre los estudiantes mostrados.' : `${changedPositions} ${changedPositions === 1 ? 'estudiante cambia' : 'estudiantes cambian'} de posición.`} <span>Corte: {result.manifest.configuration.fecha_corte}.</span></p>
+        <p>{filtered.length === 0 ? '' : filtered.every((student) => student.positionChange == null) ? 'No hay posiciones comparables entre los estudiantes mostrados.' : changedPositions === 0 ? 'No hay cambios de posición entre los estudiantes mostrados.' : `${changedPositions} ${changedPositions === 1 ? 'estudiante cambia' : 'estudiantes cambian'} de posición.`} <span>{changedScores} {changedScores === 1 ? 'puntuación cambia' : 'puntuaciones cambian'}. Corte: {result.manifest.configuration.fecha_corte}.</span></p>
       </section>
       <div className="comparison-explorer">
         <section className="comparison-people" aria-labelledby="people-title">
@@ -102,13 +130,14 @@ export default function ComparisonPage() {
               setSelectedId(student.id);
               // El panel ya existe; llevar el foco a su encabezado en la siguiente pintura.
               requestAnimationFrame(() => detailHeading.current?.focus());
-            }}><span><strong>{student.id}</strong><small>{student.group}</small></span><span className="person-outcome">{student.levelChanged ? 'Cambia el seguimiento' : student.changed ? 'Cambia la puntuación o posición' : 'Sin cambios'}</span></button></li>)}
+            }}><span><strong>{student.id}</strong><small>{student.group}</small></span><span className="person-outcome">{student.levelChanged ? 'Cambia el seguimiento' : student.changed ? 'Cambia la puntuación o posición' : student.left.level === 'sin_dictamen' ? 'Faltan datos' : 'Mismo seguimiento'}</span></button></li>)}
           </ul>}
         </section>
         <section id="comparison-person-detail" className="comparison-person-detail" aria-labelledby={selected ? 'comparison-person-title' : undefined}>
           {!selected ? <p className="feedback">Selecciona otros filtros para consultar un estudiante.</p> : <>
             <div className="person-detail-heading"><span className="section-kicker">{selected.group}</span><h2 id="comparison-person-title" ref={detailHeading} tabIndex={-1}>{selected.id}</h2><p>{outcome(selected)}</p></div>
-            <div className="option-results"><OptionResult title="REFERENCIA" config={result.left} value={selected.left} /><OptionResult title="OTRA OPCIÓN" config={result.right} value={selected.right} /></div>
+            <ScoreChange student={selected} leftName={result.left.nombre} rightName={result.right.nombre} />
+            <div className="option-results"><OptionResult title="REFERENCIA" config={result.left} value={selected.left} /><OptionResult title="CON EL CAMBIO" config={result.right} value={selected.right} /></div>
             <div className="comparison-takeaway">
               <h3>Qué significa para este estudiante</h3>
               <p>{selected.delta == null ? 'No se pueden comparar las puntuaciones porque falta información en al menos una opción.' : Math.abs(selected.delta) < 1e-9 ? 'Su puntuación de riesgo no cambia.' : `Su puntuación de riesgo ${selected.delta > 0 ? 'aumenta' : 'disminuye'} ${format(Math.abs(selected.delta))} puntos.`}</p>
