@@ -8,10 +8,10 @@ const format = (value) => new Intl.NumberFormat('es-MX', { maximumFractionDigits
 function criterionChanges(a, b) {
   const changes = [];
   for (const key of Object.keys(componentNames)) {
-    if (a.pesos[key] !== b.pesos[key]) changes.push(`El peso de ${componentNames[key]} pasa de ${format(a.pesos[key] * 100)} % a ${format(b.pesos[key] * 100)} %.`);
+    if (a.pesos[key] !== b.pesos[key]) changes.push(`La importancia de ${componentNames[key]} en la puntuación pasa de ${format(a.pesos[key] * 100)} % a ${format(b.pesos[key] * 100)} %.`);
   }
-  if (a.umbrales.alto !== b.umbrales.alto) changes.push(`El riesgo alto empieza en ${b.umbrales.alto} puntos, en lugar de ${a.umbrales.alto}.`);
-  if (a.umbrales.medio !== b.umbrales.medio) changes.push(`El riesgo medio empieza en ${b.umbrales.medio} puntos, en lugar de ${a.umbrales.medio}.`);
+  if (a.umbrales.alto !== b.umbrales.alto) changes.push(`Se recomienda atención prioritaria desde ${b.umbrales.alto} puntos; antes se necesitaban ${a.umbrales.alto}.`);
+  if (a.umbrales.medio !== b.umbrales.medio) changes.push(`Se recomienda seguimiento cercano desde ${b.umbrales.medio} puntos; antes se necesitaban ${a.umbrales.medio}.`);
   if (a.ventanaSemanas !== b.ventanaSemanas) changes.push(`Se pasa de ${a.ventanaSemanas ? `las últimas ${a.ventanaSemanas} semanas` : 'todo el periodo'} a ${b.ventanaSemanas ? `las últimas ${b.ventanaSemanas} semanas` : 'todo el periodo'}.`);
   return changes;
 }
@@ -25,9 +25,9 @@ function outcome(student) {
   return 'Pasa a monitoreo regular';
 }
 const intentions = {
-  base: { label: 'Usar los criterios base' },
-  asistencia: { label: 'Dar más peso a la asistencia' },
-  sensible: { label: 'Detectar riesgo desde menos puntos' },
+  base: { label: 'Combinar los cuatro indicadores' },
+  asistencia: { label: 'Dar más importancia a faltar a clases' },
+  sensible: { label: 'Recomendar atención desde menos puntos' },
   'ventana-corta': { label: 'Revisar solo las últimas semanas' },
 };
 function ScoreChange({ student, leftName, rightName }) {
@@ -91,12 +91,12 @@ export default function ComparisonPage() {
   const changedPositions = filtered.filter((student) => student.positionChange != null && student.positionChange !== 0).length;
 
   return <div className="comparison-workspace">
-    <div className="page-heading"><div><p className="section-kicker">EXPLORAR OPCIONES</p><h1>¿A quién atendería primero?</h1><p>Explora un cambio de criterio y consulta qué sucede con cada estudiante.</p></div>
+    <div className="page-heading"><div><p className="section-kicker">EXPLORAR OPCIONES</p><h1>¿A quién atendería primero?</h1><p>Elige qué información tendrá más importancia al recomendar el seguimiento.</p></div>
       <button type="button" className="button-secondary" disabled={status === 'loading'} onClick={() => setRevision((value) => value + 1)}>Actualizar</button>
     </div>
     <section className="comparison-question" aria-label="Opciones a comparar">
-      <details className="reference-control"><summary>Referencia: {configs.find((config) => config.id === left)?.nombre || 'Base'}</summary>
-        <label>Cambiar referencia<select value={left} onChange={(event) => setLeft(event.target.value)}>{!configs.length && <option value="base">Base</option>}{configs.map((config) => <option key={config.id} value={config.id}>{config.nombre}</option>)}</select></label>
+      <details className="reference-control"><summary>Referencia: {configs.find((config) => config.id === left)?.nombre || 'Revisión general'}</summary>
+        <label>Cambiar referencia<select value={left} onChange={(event) => setLeft(event.target.value)}>{!configs.length && <option value="base">Revisión general</option>}{configs.map((config) => <option key={config.id} value={config.id}>{config.nombre}</option>)}</select></label>
       </details>
       <fieldset className="intention-picker"><legend>¿Qué quieres explorar?</legend>
         <div className="intention-options">{(configs.length ? configs : [{ id: 'asistencia', nombre: 'Prioridad a asistencia' }]).map((config) => <label className={right === config.id ? 'is-chosen' : ''} key={config.id}>
@@ -104,9 +104,9 @@ export default function ComparisonPage() {
           <span>{intentions[config.id]?.label || config.nombre}</span>
         </label>)}</div>
       </fieldset>
-      {optionConfig && <p className="intention-description">{right === 'asistencia' ? `La asistencia representa el ${format(optionConfig.pesos.asistencia * 100)} % de la puntuación.` : right === 'sensible' ? `Se considera riesgo alto desde ${optionConfig.umbrales.alto} puntos.` : optionConfig.ventanaSemanas ? `Se analizan las últimas ${optionConfig.ventanaSemanas} semanas.` : 'Se analizan los registros de todo el periodo.'}</p>}
-      {status === 'ready' && result && <details className="criteria-changes"><summary>Qué criterios cambian</summary>
-        {changes.length ? <ul>{changes.map((change) => <li key={change}>{change}</li>)}</ul> : <p>Ambas opciones usan los mismos criterios.</p>}
+      {optionConfig && <p className="intention-description">{right === 'asistencia' ? `La asistencia representa el ${format(optionConfig.pesos.asistencia * 100)} % de la puntuación.` : right === 'sensible' ? `Se recomienda atención prioritaria al llegar a ${optionConfig.umbrales.alto} puntos de riesgo.` : optionConfig.ventanaSemanas ? `Se analizan las últimas ${optionConfig.ventanaSemanas} semanas.` : 'Se combinan asistencia, calificaciones, actividades entregadas y evolución de las calificaciones durante todo el periodo.'}</p>}
+      {status === 'ready' && result && <details className="criteria-changes"><summary>Qué cambia en el cálculo</summary>
+        {changes.length ? <ul>{changes.map((change) => <li key={change}>{change}</li>)}</ul> : <p>Ambas opciones dan la misma importancia a los indicadores y recomiendan atención desde los mismos puntos.</p>}
       </details>}
     </section>
     {status === 'loading' && <p className="feedback" role="status">Comparando las opciones…</p>}

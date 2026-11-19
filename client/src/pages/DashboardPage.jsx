@@ -52,7 +52,7 @@ export default function DashboardPage() {
 
       <div className="filter-bar">
         <label>Escenario<select value={scenario} onChange={(event) => { setSelectedId(null); setScenario(event.target.value); }}>
-          {!scenarios.length && <option value="base">Base</option>}{scenarios.map((config) => <option key={config.id} value={config.id}>{config.nombre}</option>)}
+          {!scenarios.length && <option value="base">Revisión general</option>}{scenarios.map((config) => <option key={config.id} value={config.id}>{config.nombre}</option>)}
         </select></label>
       </div>
       {status === 'loading' && <p className="feedback" role="status">Calculando indicadores y prioridades…</p>}
@@ -108,7 +108,7 @@ export default function DashboardPage() {
           </div>
           <p><span className={`action-badge plan-${plan.statuses.get(selected.id)}`}>{planLabels[plan.statuses.get(selected.id)]}</span></p>
           {selected.index != null && <><p className="risk-score">{format(selected.index)} <span>de 100 puntos</span></p>
-            <div className="table-scroll" role="region" aria-label="Cálculo del índice, desplazamiento horizontal" tabIndex={0}><table><caption className="sr-only">Componentes del índice de {selected.id}</caption><thead><tr>{['Componente', 'Indicador', 'Riesgo / 100', 'Peso original', 'Peso efectivo', 'Aportación'].map((name) => <th scope="col" key={name}>{name}</th>)}</tr></thead>
+            <div className="table-scroll" role="region" aria-label="Cálculo del índice, desplazamiento horizontal" tabIndex={0}><table><caption className="sr-only">Componentes del índice de {selected.id}</caption><thead><tr>{['Componente', 'Indicador', 'Riesgo / 100', 'Importancia configurada', 'Importancia aplicada', 'Aportación'].map((name) => <th scope="col" key={name}>{name}</th>)}</tr></thead>
               <tbody>{selected.components.map((part) => <tr key={part.name}><th scope="row">{names[part.name]}</th><td>{format(part.value)}{['asistencia', 'entregas'].includes(part.name) ? ' %' : ''}</td><td>{format(part.risk)}</td><td>{format(part.originalWeight * 100)} %</td><td>{format(part.effectiveWeight * 100)} %</td><td>{format(part.contribution)}</td></tr>)}</tbody>
             </table></div></>}
           {selected.missing.length > 0 && <div className="feedback"><strong>Información pendiente</strong><ul>{selected.missing.map((text) => <li key={text}>{text}</li>)}</ul></div>}

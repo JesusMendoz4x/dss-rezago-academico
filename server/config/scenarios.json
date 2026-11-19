@@ -36,7 +36,7 @@
     "ventanaSemanas": null,
     "capacidadTutor": null,
     "id": "base",
-    "nombre": "Base"
+    "nombre": "Revisión general"
   },
   {
     "version": "1.0.0",
@@ -75,7 +75,7 @@
     "ventanaSemanas": null,
     "capacidadTutor": null,
     "id": "asistencia",
-    "nombre": "Prioridad a asistencia"
+    "nombre": "Dar más importancia a la asistencia"
   },
   {
     "version": "1.0.0",
@@ -114,7 +114,7 @@
     "ventanaSemanas": null,
     "capacidadTutor": null,
     "id": "sensible",
-    "nombre": "Umbral más sensible"
+    "nombre": "Atención prioritaria desde 50 puntos"
   },
   {
     "version": "1.0.0",
